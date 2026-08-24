@@ -1,4 +1,7 @@
+from pathlib import Path
+import pandas as pd
 import matplotlib.pyplot as plt
+BASE_DIR = Path(__file__).resolve().parent
 from main import load_and_clean_data
 """Data clreaning and wrangling is done, now we can start with data visualization and analysis with Matplotlib libraries"""
 # Get cleaned data
@@ -21,6 +24,31 @@ print(monthly_revenue)
 yearly_revenue = df.groupby('Order_Year').agg(yearly_revenue=('Sales', 'sum'), items=('Sales', 'count')).reset_index() # calculating total revenue for each year and the number of items sold in each year
 yearly_revenue=yearly_revenue.sort_values('Order_Year')
 print(yearly_revenue)
+# =========================
+# Save Analysis Results
+# =========================
+
+with pd.ExcelWriter(BASE_DIR / "analysis_results.xlsx") as writer:
+
+    cat_revenue.to_excel(
+        writer,
+        sheet_name="Category"
+    )
+
+    subcat_revenue.to_excel(
+        writer,
+        sheet_name="SubCategory"
+    )
+
+    monthly_revenue.to_excel(
+        writer,
+        sheet_name="Monthly"
+    )
+
+    yearly_revenue.to_excel(
+        writer,
+        sheet_name="Yearly"
+    )
 # =========================
 # Visualization
 # =========================

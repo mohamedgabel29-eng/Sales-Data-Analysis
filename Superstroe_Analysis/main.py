@@ -1,10 +1,12 @@
+from pathlib import Path
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from datetime import datetime
+import matplotlib.pyplot as plt
+BASE_DIR = Path(__file__).resolve().parent
 #********************************
 def load_and_clean_data():
- df = pd.read_excel("train.xlsx")
+ df = pd.read_excel(BASE_DIR / "train.xlsx")
 #********************************
 # Data cleaning :
 #cleaning Headers :
@@ -52,5 +54,6 @@ def load_and_clean_data():
   # Fill missing Sales values with the median of each product and then fill remaining NaN values with the median of the whole column
  df['Sales'] = df.groupby('Product_Name')['Sales'].transform(lambda x: x.fillna(x.median())) # filling NaN values in Sales column with the median of each product
  df['Sales'] = df['Sales'].fillna(df['Sales'].median()) # filling NaN values in Sales column with the median of the whole column ,that is for the products that have all NaN values in Sales column or new products that have no sales yet. 
+ df.to_excel(BASE_DIR / "cleaned_data.xlsx", index=False)
  return df
 #*****************************************************************************************
